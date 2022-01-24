@@ -1,0 +1,105 @@
+
+REGISTRY=quay.io/paulbarrie7
+
+# API GATEWAY
+API_GATEWAY_IMAGE=cinema-api-gateway
+API_GATEWAY_TAG=1.0.0
+API_GATEWAY_FOLDER=api-gateway
+
+# BOOKING SERVICE
+BOOKING_SERVICE_IMAGE=cinema-booking
+BOOKING_SERVICE_TAG=1.0.0
+BOOKING_SERVICE_FOLDER=booking-service
+
+# CATALOG SERVICE
+CINEMA_CATALOG_SERVICE_IMAGE=cinema-catalog
+CINEMA_CATALOG_SERVICE_TAG=1.0.0
+CINEMA_CATALOG_SERVICE_FOLDER=cinema-catalog-service
+
+# MOVIES SERVICE
+MOVIES_SERVICE_IMAGE=cinema-movies
+MOVIES_SERVICE_TAG=1.0.0
+MOVIES_SERVICE_FOLDER=movies-service
+
+# NOTIFICATION SERVICE
+NOTIFICATION_SERVICE_IMAGE=cinema-notification
+NOTIFICATION_SERVICE_TAG=1.0.0
+NOTIFICATION_SERVICE_FOLDER=notification-service
+
+#PAYMENT SERVICE
+PAYMENT_SERVICE_IMAGE=cinema-payment
+PAYMENT_SERVICE_TAG=1.0.0
+PAYMENT_SERVICE_FOLDER=payment-service
+
+_build-docker:
+	docker build -t $(REGISTRY)/$(DOCKER_IMAGE):$(DOCKER_TAG) $(SERVICE_DIR)
+.PHONY: _build-docker
+
+_deploy-docker:
+	docker push $(REGISTRY)/$(DOCKER_IMAGE):$(DOCKER_TAG)
+.PHONY: _deploy-docker
+
+
+build-docker-api-gateway:
+	$(MAKE) _build-docker DOCKER_IMAGE=$(API_GATEWAY_IMAGE) DOCKER_TAG=$(API_GATEWAY_TAG) SERVICE_DIR=$(API_GATEWAY_FOLDER)
+.PHONY: build-docker-api-gateway
+
+deploy-docker-api-gateway:
+	$(MAKE) build-docker-api-gateway API_GATEWAY_IMAGE=$(API_GATEWAY_IMAGE) API_GATEWAY_TAG=$(API_GATEWAY_TAG) API_GATEWAY_FOLDER=$(API_GATEWAY_FOLDER)
+	$(MAKE) _deploy-docker DOCKER_IMAGE=$(API_GATEWAY_IMAGE) DOCKER_TAG=$(API_GATEWAY_TAG) SERVICE_DIR=$(API_GATEWAY_FOLDER)
+.PHONY: deploy-docker-api-gateway
+
+build-docker-booking-service:
+	$(MAKE) _build-docker DOCKER_IMAGE=$(BOOKING_SERVICE_IMAGE) DOCKER_TAG=$(BOOKING_SERVICE_TAG) SERVICE_DIR=$(BOOKING_SERVICE_FOLDER)
+.PHONY: build-docker-booking-service
+
+deploy-docker-booking-service:
+	$(MAKE) build-docker-booking-service BOOKING_SERVICE_IMAGE=$(BOOKING_SERVICE_IMAGE) BOOKING_SERVICE_TAG=$(BOOKING_SERVICE_TAG) BOOKING_SERVICE_FOLDER=$(BOOKING_SERVICE_FOLDER)
+	$(MAKE) _deploy-docker DOCKER_IMAGE=$(BOOKING_SERVICE_IMAGE) DOCKER_TAG=$(BOOKING_SERVICE_TAG) SERVICE_DIR=$(BOOKING_SERVICE_FOLDER)
+.PHONY: deploy-docker-booking-service
+
+build-docker-cinema-catalog-service:
+	$(MAKE) _build-docker DOCKER_IMAGE=$(CINEMA_CATALOG_SERVICE_IMAGE) DOCKER_TAG=$(CINEMA_CATALOG_SERVICE_TAG) SERVICE_DIR=$(CINEMA_CATALOG_SERVICE_FOLDER)
+.PHONY: build-docker-cinema-catalog-service
+
+deploy-docker-cinema-catalog-service:
+	$(MAKE) build-docker-cinema-catalog-service CINEMA_CATALOG_SERVICE_IMAGE=$(CINEMA_CATALOG_SERVICE_IMAGE) CINEMA_CATALOG_SERVICE_IMAGE=$(CINEMA_CATALOG_SERVICE_IMAGE) CINEMA_CATALOG_SERVICE_FOLDER=$(CINEMA_CATALOG_SERVICE_FOLDER)
+	$(MAKE) _deploy-docker DOCKER_IMAGE=$(CINEMA_CATALOG_SERVICE_IMAGE) DOCKER_TAG=$(CINEMA_CATALOG_SERVICE_TAG) SERVICE_DIR=$(CINEMA_CATALOG_SERVICE_FOLDER)
+.PHONY: deploy-docker-cinema-catalog-service
+
+build-docker-movies-service:
+	$(MAKE) _build-docker DOCKER_IMAGE=$(MOVIES_SERVICE_IMAGE) DOCKER_TAG=$(MOVIES_SERVICE_TAG) SERVICE_DIR=$(MOVIES_SERVICE_FOLDER)
+.PHONY: build-docker-movies-service
+
+deploy-docker-movies-service:
+	$(MAKE) build-docker-movies-service MOVIES_SERVICE_IMAGE=$(MOVIES_SERVICE_IMAGE) MOVIES_SERVICE_TAG=$(MOVIES_SERVICE_TAG) MOVIES_SERVICE_FOLDER=$(MOVIES_SERVICE_FOLDER)
+	$(MAKE) _deploy-docker DOCKER_IMAGE=$(MOVIES_SERVICE_IMAGE) DOCKER_TAG=$(MOVIES_SERVICE_TAG) SERVICE_DIR=$(MOVIES_SERVICE_FOLDER)
+.PHONY: deploy-docker-movies-service
+
+build-docker-notification-service:
+	$(MAKE) _build-docker DOCKER_IMAGE=$(NOTIFICATION_SERVICE_IMAGE) DOCKER_TAG=$(NOTIFICATION_SERVICE_TAG) SERVICE_DIR=$(NOTIFICATION_SERVICE_FOLDER)
+.PHONY: build-docker-notification-service
+
+deploy-docker-notification-service:
+	$(MAKE) build-docker-notification-service NOTIFICATION_SERVICE_IMAGE=$(NOTIFICATION_SERVICE_IMAGE) NOTIFICATION_SERVICE_TAG=$(NOTIFICATION_SERVICE_TAG) NOTIFICATION_SERVICE_FOLDER=$(NOTIFICATION_SERVICE_FOLDER)
+	$(MAKE) _deploy-docker DOCKER_IMAGE=$(NOTIFICATION_SERVICE_IMAGE) DOCKER_TAG=$(NOTIFICATION_SERVICE_TAG) SERVICE_DIR=$(NOTIFICATION_SERVICE_FOLDER)
+.PHONY: deploy-docker-notification-service
+
+build-docker-payment-service:
+	$(MAKE) _build-docker DOCKER_IMAGE=$(PAYMENT_SERVICE_IMAGE) DOCKER_TAG=$(PAYMENT_SERVICE_TAG) SERVICE_DIR=$(PAYMENT_SERVICE_FOLDER)
+.PHONY: build-docker-payment-service
+
+deploy-docker-payment-service:
+	$(MAKE) build-docker-payment-service PAYMENT_SERVICE_IMAGE=$(PAYMENT_SERVICE_IMAGE) PAYMENT_SERVICE_TAG=$(PAYMENT_SERVICE_TAG) PAYMENT_SERVICE_FOLDER=$(PAYMENT_SERVICE_FOLDER)
+	$(MAKE) _deploy-docker DOCKER_IMAGE=$(PAYMENT_SERVICE_IMAGE) DOCKER_TAG=$(PAYMENT_SERVICE_TAG) SERVICE_DIR=$(PAYMENT_SERVICE_FOLDER)
+.PHONY: deploy-docker-payment-service
+
+
+deploy:
+	$(MAKE) deploy-docker-api-gateway
+	$(MAKE) deploy-docker-booking-service
+	$(MAKE) deploy-docker-cinema-catalog-service
+	$(MAKE) deploy-docker-movies-service
+	$(MAKE) deploy-docker-notification-service
+	$(MAKE) deploy-docker-payment-service
+.PHONY: deploy
